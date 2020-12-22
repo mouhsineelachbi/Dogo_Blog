@@ -1,7 +1,12 @@
 <template>
   <div class="home">
       <h1> Home </h1>
-      <h2>{{  age   }}</h2>
+      <input type="text" v-model="search">
+      <p> searched term -  {{ search }}</p>
+
+      <div v-for="name in matching" :key="name">
+        {{ name }}
+      </div>
       
   </div>
 </template>
@@ -13,12 +18,19 @@ import { computed, reactive, ref } from 'vue';
 export default {
   name: 'Home',
   setup () {
-    // use computed values
-    let age = computed(() => {
-      return Math.floor(Math.random()*100000);
+
+    let search = ref('');
+
+    let names = ref(['Mouhsine', 'java', 'python', 'javascript', 'Math', 'physics'])
+
+    let matching = computed( () => {
+      return names.value.filter( name => {
+        return name.includes(search.value);
+
+      })
     })
 
-    return {  age }
+    return {  search, names, matching }
   }
 }
 </script>
