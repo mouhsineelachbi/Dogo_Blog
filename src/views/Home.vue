@@ -1,12 +1,13 @@
 <template>
   <div class="home">
       Home
-      <p>Hello my name is {{ name }} and I'm {{ age }} years old</p>
+      <p ref="p">Hello my name is {{ name }} and I'm {{ age }} years old</p>
       <button @click="handleClick">Click me</button>
   </div>
 </template>
 
 <script>
+import { ref } from 'vue';
 
 
 export default {
@@ -15,11 +16,16 @@ export default {
     let name = 'Mouhsine'
     let age = 25;
 
+    //  Creating a ref to the paragraphe in the template
+    let p = ref(null);
+
     function handleClick () {
-      console.log('You clicked me')
+      console.log(p.value);
+      p.value.classList.add('test')
+      p.value.textContent = 'this is a lie'
     }
 
-    return {  name, age,  handleClick }
+    return {  name, age,  handleClick, p }
   }
 }
 </script>
