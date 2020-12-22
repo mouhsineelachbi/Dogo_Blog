@@ -1,32 +1,36 @@
 <template>
   <div class="home">
-      Home
-      <p ref="p">Hello my name is {{ name }} and I'm {{ age }} years old</p>
-      <button @click="handleClick">Click me</button>
-      <input type="text" name="name" id="name" v-model="name">
-      <button @click="age++">Increment Age</button>
+      <h1> Home </h1>
+      <h2> Refs </h2>
+      <p> {{ meOne.name }} - {{ meOne.age }}</p>
+      <button @click="updateMeOne">Update One</button>
+      <h2>Reactive</h2>
+      <p> {{ meTwo.name }} - {{ meTwo.age }}</p>
+      <button @click="updateMeTwo">Update Two</button>
+      
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 
 export default {
   name: 'Home',
   setup () {
-    const name = ref('Mouhsine')
-    const age = ref(25);
 
-    //  Creating a ref to the paragraphe in the template
-    // let p = ref(null);
-
-    function handleClick () {
-      name.value = 'Not Mouhsine';
-      age.value = 99;
+    let meOne = ref({ name: 'Mouhsine', age: 25 }); // work better for external composition functions cz thy're retain reactivity when exposed
+    let meTwo = reactive({ name: 'Mythose', age: 25 }); // reactive doesn't work with primitive value like reactive('mouhsine') or reactive(1)
+    
+    function updateMeOne () {
+      meOne.value.age = Math.floor(Math.random()*100);
     }
 
-    return {  name, age,  handleClick }
+    function updateMeTwo () {
+      meTwo.age = Math.floor(Math.random()*100);
+    }    
+
+    return { meOne, updateMeOne, meTwo, updateMeTwo }
   }
 }
 </script>
