@@ -7,12 +7,14 @@
       <div v-for="name in matching" :key="name">
         {{ name }}
       </div>
+
+      <button @click="handleClick">stop watching</button>
       
   </div>
 </template>
 
 <script>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch, watchEffect } from 'vue';
 
 
 export default {
@@ -20,6 +22,23 @@ export default {
   setup () {
 
     let search = ref('');
+
+    // watch(search, ()=> console.log('watch function ran'))
+
+    // watchEffect(()=>{
+    //   console.log('watchEffect function is ran '+search.value);
+    // })
+
+
+    // How to stop watch or watchEffect is to invoke them by 
+    const Stopwatch = watch(search, ()=> console.log('watch function ran'))
+    const StopwatchEffect = watchEffect(()=>{ console.log('watchEffect function is ran '+search.value); });
+
+    function handleClick() {
+      Stopwatch();
+      StopwatchEffect();
+    }
+    // End stop watch and watchEffect
 
     let names = ref(['Mouhsine', 'java', 'python', 'javascript', 'Math', 'physics'])
 
@@ -30,7 +49,7 @@ export default {
       })
     })
 
-    return {  search, names, matching }
+    return {  search, names, matching, handleClick }
   }
 }
 </script>
