@@ -1,9 +1,17 @@
 <template>
   <div class="home">
       <h1> Home </h1>
-      <PostList :posts="posts" v-if="showPosts"/>
-      <button @click="showPosts = !showPosts">Toggle Posts</button>
-      <button @click="posts.pop()">Delete post</button>
+      
+      <div v-if="error"> {{ error }} </div>
+      
+      <div v-if="posts.length">
+        <PostList :posts="posts"/>
+      </div>
+
+      <div v-else>
+        <p>Loading....</p>
+      </div>
+      
   </div>
 </template>
 
@@ -16,14 +24,27 @@ export default {
   name: 'Home',
   components: { PostList },
   setup () {
-    const posts = ref([
-      { title: 'Welcome to the blog', body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat nihil nisi doloribus suscipit magni iusto porro harum, eveniet natus dicta vel modi accusamus reiciendis, unde vero debitis cupiditate ratione. Consectetur velit, eveniet labore vero ad ipsa sint quis dolorum. Blanditiis perferendis eos quisquam obcaecati commodi error, suscipit, a autem corrupti magni voluptatibus quo eligendi praesentium atque dolor veritatis totam! Iste, autem facilis? Sed veniam voluptate dolores similique, perspiciatis, itaque repellendus minus rerum praesentium molestias fugit quidem est neque ullam enim ducimus doloribus reiciendis a voluptatum. Quod facere molestiae, in quo itaque quasi vero, rerum sit commodi odit perspiciatis necessitatibus labore?', id: 1 },
-      { title: 'Top 5 css tips', body: 'lorem ipsum' , id: 2 },
-    ]);
+    const posts = ref([]);
+    const error = ref(null);
 
-    const showPosts = ref(true);
+    const load = async ()=> {
+      try{
+        const data = await fetch('http://localhost:3000/posts')
+        if (!data.ok) throw Error('No data available');
 
-    return { posts, showPosts }
+        // update posts value by passing data to It
+        posts.value = await data.json();
+
+      }catch(err){
+        error.value = err.message;
+        console.error(error.value);
+      }
+     
+    }
+
+    load();
+
+    return { posts, error }
   }
 }
 </script>
